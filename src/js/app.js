@@ -17,22 +17,24 @@ const todoList = {
   toggleAll() {
     const totalTodos = this.todos.length;
     let completedTodos = 0;
-    for (let i = 0; i < totalTodos; i++) {
-      if (this.todos[i].completed === true) {
+
+    //get all completed todos
+    this.todos.forEach(todo => {
+      if (todo.completed === true)
         completedTodos++;
       }
-    }
-    if (completedTodos === totalTodos) {
-      for (let j = 0; j < totalTodos; j++) {
-        this.todos[j].completed = false;
+    );
+
+    this.todos.forEach(todo => {
+      if (completedTodos === totalTodos)
+        todo.completed = false;
+      else
+        todo.completed = true;
       }
-    } else {
-      for (let l = 0; l < totalTodos; l++) {
-        this.todos[l].completed = true;
-      }
-    }
+    );
   }
 };
+
 //recieve input data and apply creation methods
 const handlers = {
   addTodo: () => {
@@ -64,14 +66,15 @@ const handlers = {
     view.displayTodos();
   }
 };
+
 //data display methods
 const view = {
   displayTodos() {
     const todosUl = document.querySelector('ul');
     todosUl.innerHTML = '';
-    for (let i = 0; i < todoList.todos.length; i++) {
+
+    todoList.todos.forEach(function(todo, position) {
       const todosLi = document.createElement('li');
-      const todo = todoList.todos[i];
       let todoTextCompletion = '';
 
       if (todo.completed === true) {
@@ -80,11 +83,11 @@ const view = {
         todoTextCompletion = '( ) ' + todo.todoText;
       }
 
-      todosLi.id = i;
+      todosLi.id = position;
       todosLi.textContent = todoTextCompletion;
       todosLi.appendChild(this.createDeleteBtn());
       todosUl.appendChild(todosLi);
-    }
+    }, this);
   },
   createDeleteBtn: () => {
     const deleteBtn = document.createElement('button');
